@@ -1,6 +1,6 @@
 # Deal - Go
 
-[![test](https://github.com/faunists/deal-go/actions/workflows/test.yml/badge.svg)](https://github.com/faunists/deal-go/actions/workflows/test.yml)
+[![test](https://github.com/faunists/deal-go/actions/workflows/test.yaml/badge.svg)](https://github.com/faunists/deal-go/actions/workflows/test.yaml)
 
 ## Introduction
 
