@@ -1,0 +1,29 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Setup buf
+        uses: bufbuild/buf-setup-action@v0.3.1
+
+      - name: buf lint
+        uses: bufbuild/buf-lint-action@v0.3.0
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+
+      - name: Test
+        run: go test -v -race -coverprofile=coverage.out ./...
