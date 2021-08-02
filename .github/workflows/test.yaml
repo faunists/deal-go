@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+# Enforces the use of go modules
+env:
+  GO111MODULE: on
+
 jobs:
   build:
     runs-on: ubuntu-latest
