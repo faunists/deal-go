@@ -2,6 +2,7 @@
 
 [![test](https://github.com/faunists/deal-go/actions/workflows/test.yaml/badge.svg)](https://github.com/faunists/deal-go/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/faunists/deal-go/branch/main/graph/badge.svg?token=qFlORZnn09)](https://codecov.io/gh/faunists/deal-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/faunists/deal-go)](https://goreportcard.com/report/github.com/faunists/deal-go)
 
 ## Introduction
 
