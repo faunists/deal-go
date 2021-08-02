@@ -7,6 +7,7 @@ import (
 	"github.com/faunists/deal/entities"
 )
 
+// ReadContractFile reads a JSON File and try to parse it to a entities.Contract object
 func ReadContractFile(filePath string) (entities.Contract, error) {
 	jsonData, err := ioutil.ReadFile(filePath)
 	if err != nil {

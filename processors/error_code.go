@@ -20,6 +20,7 @@ var allowedErrorCodeNames = []string{
 	"Unauthenticated",
 }
 
+// IsErrorCodeValid returns true when a error code exists in the GRPC Codes package
 func IsErrorCodeValid(errorCode string) bool {
 	for _, allowedCode := range allowedErrorCodeNames {
 		if errorCode == allowedCode {
