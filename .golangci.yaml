@@ -1,0 +1,165 @@
+# options for analysis running
+run:
+  concurrency: 4
+  timeout: 1m
+  issues-exit-code: 1
+  tests: true
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # default is "colored-line-number"
+#  format: github-actions
+
+  # sorts results by: filepath, line and column
+  sort-results: true
+
+# all available settings of specific linters
+linters-settings:
+  dogsled:
+    max-blank-identifiers: 2
+
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  errorlint:
+    errorf: true
+    asserts: true
+    comparison: true
+
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: false
+
+  gocognit:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 10
+
+  nestif:
+    min-complexity: 3
+
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+  gofmt:
+    # simplify code: gofmt with `-s` option, true by default
+    simplify: true
+
+  goimports:
+    local-prefixes: github.com/faunists/deal
+
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+        checks: argument,condition,return,assign
+
+  gomoddirectives:
+    replace-local: true
+    retract-allow-no-explanation: true
+    exclude-forbidden: true
+
+  govet:
+    # report about shadowed variables
+    check-shadowing: true
+    enable-all: true
+    disable:
+      - fieldalignment
+
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+    line-length: 100
+    # tab width in spaces. Default to 1.
+    tab-width: 4
+
+  misspell:
+    locale: US
+
+  nolintlint:
+    allow-unused: true
+    require-explanation: true
+    require-specific: true
+
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: warning
+    rules:
+      - name: indent-error-flow
+        severity: warning
+      - name: add-constant
+        severity: warning
+        arguments:
+          - maxLitCount: "3"
+            allowStrs: '""'
+            allowInts: "0,1,2"
+            allowFloats: "0.0,0.,1.0,1.,2.0,2."
+
+  staticcheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
+  testpackage:
+    # regexp pattern to skip files
+    skip-regexp: (export|internal)_test\.go
+
+  thelper:
+    test:
+      first: true
+      name: true
+      begin: true
+    benchmark:
+      first: true
+      name: true
+      begin: true
+    tb:
+      first: true
+      name: true
+      begin: true
+
+  unused:
+    go: "1.16"
+
+linters:
+  disable-all: true
+  enable:
+    - dogsled
+    - errcheck
+    - errorlint
+    - exhaustive
+    - gocognit
+    - nestif
+    - goconst
+    - gofmt
+    - goimports
+    - gomnd
+    - gomoddirectives
+    - govet
+    - lll
+    - misspell
+    - nolintlint
+    - revive
+    - staticcheck
+    - thelper
+    - unused
+  fast: false
+
+
+issues:
+  # Independently from option `exclude` we use default exclude patterns,
+  # it can be disabled by this option. To list all
+  # excluded by default patterns execute `golangci-lint run --help`.
+  # Default value for this option is true.
+  exclude-use-default: false
+  exclude-case-sensitive: true
+
+  # Show only new issues created after git revision `REV`
+  new-from-rev: HEAD~
+
+  # Fix found issues (if it's supported by the linter)
+  fix: false

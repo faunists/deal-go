@@ -1,0 +1,14 @@
+version: v1beta1
+name: buf.build/faunists/deal
+deps:
+  - buf.build/beta/googleapis
+build:
+  roots:
+    - proto
+lint:
+  use:
+    - DEFAULT
+  ignore_only:
+    PACKAGE_VERSION_SUFFIX:
+      - deal/v1/contract/annotations.proto
+      - deal/v1/contract/contract.proto
