@@ -28,6 +28,8 @@ jobs:
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
+        with:
+          skip-go-installation: true
 
       - name: Test
         run: go test -v -race -coverprofile=coverage.out ./...
