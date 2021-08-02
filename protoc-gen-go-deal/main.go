@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/faunists/deal/protogen/deal/v1/contract"
 	"io"
 	"strings"
+
+	"github.com/faunists/deal/protogen/deal/v1/contract"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/encoding/protojson"
