@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package deal.v1.contract;
 
-option go_package = "github.com/faunists/deal/v1/contract";
+option go_package = "github.com/faunists/deal-go/v1/contract";
 
 import "google/protobuf/descriptor.proto";
 import "deal/v1/contract/contract.proto";

@@ -8,7 +8,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/faunists/deal/protogen/deal/v1/contract"
+	"github.com/faunists/deal-go/protogen/deal/v1/contract"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -18,8 +18,8 @@ import (
 	"google.golang.org/protobuf/types/dynamicpb"
 	"google.golang.org/protobuf/types/pluginpb"
 
-	"github.com/faunists/deal/entities"
-	"github.com/faunists/deal/processors"
+	"github.com/faunists/deal-go/entities"
+	"github.com/faunists/deal-go/processors"
 )
 
 const (

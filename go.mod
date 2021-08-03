@@ -1,4 +1,4 @@
-module github.com/faunists/deal
+module github.com/faunists/deal-go
 
 go 1.16
 

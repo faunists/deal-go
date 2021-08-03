@@ -3,7 +3,7 @@ package processors_test
 import (
 	"testing"
 
-	"github.com/faunists/deal/processors"
+	"github.com/faunists/deal-go/processors"
 )
 
 func TestMakeExportedName(t *testing.T) {

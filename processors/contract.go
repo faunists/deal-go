@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/faunists/deal/entities"
+	"github.com/faunists/deal-go/entities"
 )
 
 // ReadContractFile reads a JSON File and try to parse it to a entities.Contract object

@@ -4,7 +4,7 @@ package deal.v1.contract;
 
 import "google/protobuf/struct.proto";
 
-option go_package = "github.com/faunists/deal/v1/contract";
+option go_package = "github.com/faunists/deal-go/v1/contract";
 
 message DealContract {
   string contract_file = 1;

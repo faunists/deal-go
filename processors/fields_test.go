@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/faunists/deal/processors"
+	"github.com/faunists/deal-go/processors"
 )
 
 func TestFormatFieldValue(t *testing.T) {
