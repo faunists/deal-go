@@ -57,7 +57,7 @@ You can set both, Success and Failures cases:
               "requestField": "VALUE"
             },
             "response": {
-              "responseField": "RETURN_VALUE"
+              "responseField": 42
             }
           }
         ],
