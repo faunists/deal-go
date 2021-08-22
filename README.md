@@ -14,7 +14,7 @@ This plugin allows us to write [Consumer-Driver Contracts](https://martinfowler.
 
 ### Proto service
 
-First you need a proto service and add an option to it using our plugin providing the contract path:
+First you need a proto service:
 ```protobuf
 syntax = "proto3";
 
@@ -33,10 +33,6 @@ message ResponseMessage {
 
 service MyService {
   rpc MyMethod(RequestMessage) returns (ResponseMessage);
-
-  option(deal.v1.contract.deal_contract) = {
-    contract_file: "contract.json"
-  };
 }
 ```
 
@@ -81,13 +77,13 @@ You can set both, Success and Failures cases:
 
 ### Generating code
 
-If you're using [buf](https://buf.build) just add the following entry and execute `buf generate`:
+If you're using [buf](https://buf.build) just add the following entry and execute `buf generate` passing your contract file path:
 ```yaml
 version: v1beta1
 plugins:
   - name: go-deal
     out: protogen
-    opt: paths=source_relative
+    opt: paths=source_relative,contract-file=contract.json
 ```
 
 > Disclaimer: You must be using `go-grpc` in order to make the things work
