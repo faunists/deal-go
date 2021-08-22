@@ -1,5 +1,7 @@
 package entities
 
+import "fmt"
+
 // Contract represents the root of everything that will be generated
 type Contract struct {
 	Name     string             `json:"name"`
@@ -37,4 +39,8 @@ type FailureCase struct {
 type GRPCError struct {
 	ErrorCode string `json:"errorCode"`
 	Message   string `json:"message"`
+}
+
+func (e GRPCError) String() string {
+	return fmt.Sprintf("rpc error: code = %s desc = %s", e.ErrorCode, e.Message)
 }
