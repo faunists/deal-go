@@ -20,12 +20,6 @@ jobs:
         with:
           go-version: 1.16
 
-      - name: Setup buf
-        uses: bufbuild/buf-setup-action@v0.3.1
-
-      - name: buf lint
-        uses: bufbuild/buf-lint-action@v0.3.0
-
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:

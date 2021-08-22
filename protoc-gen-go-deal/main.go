@@ -8,13 +8,9 @@ import (
 	"io"
 	"strings"
 
-	"github.com/faunists/deal-go/protogen/deal/v1/contract"
-
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/dynamicpb"
 	"google.golang.org/protobuf/types/pluginpb"
 
@@ -30,18 +26,23 @@ const (
 	protoPackage   = protogen.GoImportPath("google.golang.org/protobuf/proto")
 )
 
-func main() {
-	// TODO: Add flags to be used to give the user the option between flags or service option
+func main() { //nolint:gocognit // this function set flags and verify them, after generate the code
 	var flags flag.FlagSet
+
+	contractFilePath := flags.String("contract-file", "", "Path to your contract file")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
 	}.Run(func(plugin *protogen.Plugin) error {
 		plugin.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
 
+		if *contractFilePath == "" {
+			return fmt.Errorf("'contract-file' option not provided")
+		}
+
 		for _, file := range plugin.Files {
 			if file.Generate {
-				_, err := generateContracts(plugin, file)
+				_, err := generateContracts(plugin, file, *contractFilePath)
 				if err != nil {
 					return err
 				}
@@ -52,12 +53,19 @@ func main() {
 	})
 }
 
-func generateContracts( //nolint:gocognit // this function only call the functions to generate cases
+func generateContracts(
 	plugin *protogen.Plugin,
 	file *protogen.File,
+	contractFilePath string,
 ) (*protogen.GeneratedFile, error) {
 	if len(file.Services) == 0 {
 		return nil, nil
+	}
+
+	// Parse contract JSON file that was defined in the service options
+	rawContract, err := processors.ReadContractFile(contractFilePath)
+	if err != nil {
+		return nil, err
 	}
 
 	filename := fmt.Sprintf("%s_contract.pb.go", file.GeneratedFilenamePrefix)
@@ -66,24 +74,6 @@ func generateContracts( //nolint:gocognit // this function only call the functio
 	writeHeader(file, newFile)
 
 	for _, service := range file.Services {
-		// Get service options
-		serviceOptions, ok := service.Desc.Options().(*descriptorpb.ServiceOptions)
-		if !ok {
-			return nil, fmt.Errorf("failed to parse the service options")
-		}
-
-		// Try to get our extension information
-		contractExtension := proto.GetExtension(serviceOptions, contract.E_DealContract)
-		contractOption, ok := contractExtension.(*contract.DealContract)
-		if !ok {
-			return nil, fmt.Errorf("failed to parse the contract")
-		}
-
-		// Parse contract JSON file that was defined in the service options
-		rawContract, err := processors.ReadContractFile(contractOption.ContractFile)
-		if err != nil {
-			return nil, err
-		}
 
 		// Verifies if the file has a contract for the given service
 		serviceContract, hasContract := rawContract.Services[service.GoName]
