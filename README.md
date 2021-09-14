@@ -6,9 +6,14 @@
 
 ## Introduction
 
-__WE DO NOT SUPPORT THE SERVER SIDE YET__
-
 This plugin allows us to write [Consumer-Driver Contracts](https://martinfowler.com/articles/consumerDrivenContracts.html) tests!
+
+__Deal__ will generate some code for us:
+- A Client to be used in the client side to mock the responses based on the contract
+- A Stub Server to be used in the client side as the Client above, but you should run it as another application
+- Server Test Function, you should pass your server implementation to the function and all the contracts will be validated against it
+
+You can check out an example project [here](https://github.com/faunists/deal-go-example).
 
 ## Usage example
 
