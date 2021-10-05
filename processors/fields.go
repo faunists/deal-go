@@ -28,7 +28,9 @@ func FormatFieldValue(value protoreflect.Value) string {
 		return fmt.Sprintf("%q", v)
 	case []byte:
 		return fmt.Sprintf("%#v", v)
-	case protoreflect.Message, protoreflect.List, protoreflect.Map, protoreflect.EnumNumber:
+	case protoreflect.EnumNumber:
+		return fmt.Sprintf("%d", v)
+	case protoreflect.Message, protoreflect.List, protoreflect.Map:
 		return fmt.Sprintf(`"Unsupported type: %T"`, v)
 	default:
 		return fmt.Sprintf("%v", v)

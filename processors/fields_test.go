@@ -61,6 +61,11 @@ func TestFormatFieldValue(t *testing.T) {
 			value:          protoreflect.ValueOfBytes([]byte("abcd")),
 			expectedFormat: "[]byte{0x61, 0x62, 0x63, 0x64}",
 		},
+		{
+			name:           "should format correctly when value is EnumNumber",
+			value:          protoreflect.ValueOfEnum(protoreflect.EnumNumber(128)), //nolint:revive // random number
+			expectedFormat: "128",
+		},
 	}
 
 	for _, test := range tests {
