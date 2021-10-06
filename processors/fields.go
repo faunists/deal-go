@@ -20,7 +20,6 @@ func FormatFieldValue(value protoreflect.Value) string {
 	//   - protoreflect.Message
 	//   - protoreflect.List
 	//   - protoreflect.Map
-	//   - protoreflect.EnumNumber
 	switch v := value.Interface(); v.(type) {
 	case float32, float64:
 		return fmt.Sprintf("%f", v)
