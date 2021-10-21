@@ -6,11 +6,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/dynamicpb"
 	"google.golang.org/protobuf/types/pluginpb"
 
@@ -303,58 +301,34 @@ func getProtoRepresentation(
 		return "", err
 	}
 
-	messageArguments, err := inputOutputToString(marshaledRequest, message)
+	messageArguments, err := inputOutputToString(file.QualifiedGoIdent, marshaledRequest, message)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate message representation: %w", err)
 	}
 
-	return fmt.Sprintf(
-		"&%s{%s}",
-		file.QualifiedGoIdent(message.GoIdent),
-		strings.Join(messageArguments, ","),
-	), nil
+	return messageArguments, nil
 }
 
-func inputOutputToString(data []byte, message *protogen.Message) ([]string, error) {
+func inputOutputToString(
+	identFunc processors.IdentFunc,
+	data []byte,
+	message *protogen.Message,
+) (string, error) {
 	// This step validates the data provided by the user through JSON file
 	methodInputMessage := dynamicpb.NewMessage(message.Desc)
 	err := protojson.Unmarshal(data, methodInputMessage)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	// Making this map we're able to correlate a field with a field descriptor
-	fieldsMapByNumber := make(map[protoreflect.FieldNumber]*protogen.Field)
-	for _, field := range message.Fields {
-		fieldsMapByNumber[field.Desc.Number()] = field
-	}
+	fieldsByNumber := processors.CreateFieldsByNumber(message.Fields)
 
-	// Try to get all of the populated fields (name and value)
-	messageArguments := make([]string, 0)
-	methodInputMessage.Range(
-		func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
-			field, exists := fieldsMapByNumber[descriptor.Number()]
-			if !exists {
-				err = fmt.Errorf(
-					"field not found %s while inspecting message %s",
-					descriptor.Name(), message.Desc.Name(),
-				)
-				return false
-			}
-
-			messageArguments = append(
-				messageArguments,
-				fmt.Sprintf("%s: %s", field.GoName, processors.FormatFieldValue(value)),
-			)
-
-			return true
-		},
+	return processors.FormatMessageFieldNew(
+		identFunc,
+		message.GoIdent,
+		fieldsByNumber,
+		methodInputMessage,
 	)
-	if err != nil {
-		return nil, err
-	}
-
-	return messageArguments, nil
 }
 
 func generateServerTest(
