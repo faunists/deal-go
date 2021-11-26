@@ -87,6 +87,17 @@ func TestFormatFieldValue(t *testing.T) {
 		//	field:          nil,
 		//	expectedFormat: `{Name: "Name", Age: 10}`,
 		//},
+		// TODO: Find a way to create a list and generate the field from them
+		//{
+		//	name: "should format correctly when value is List",
+		//	value: protoreflect.ValueOfList(&testList{
+		//		values: []protoreflect.Value{
+		//			protoreflect.ValueOfInt64(42),
+		//		},
+		//	}),
+		//	field:          nil,
+		//	expectedFormat: "[]int64{42}",
+		//},
 	}
 
 	identFunc := func(ident protogen.GoIdent) string {

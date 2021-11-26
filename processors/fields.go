@@ -32,9 +32,8 @@ func FormatFieldValue(
 	field *protogen.Field,
 	value protoreflect.Value,
 ) (string, error) {
-	// TODO: Make sure this works for proto enum, list, and map
+	// TODO: Make sure this works for proto enum, and map
 	// References:
-	//   - protoreflect.List
 	//   - protoreflect.Map
 	switch v := value.Interface(); v.(type) {
 	case float32, float64:
@@ -55,7 +54,36 @@ func FormatFieldValue(
 			fieldsByNumber,
 			value.Message(),
 		)
-	case protoreflect.List, protoreflect.Map:
+	case protoreflect.List:
+		list := value.List()
+
+		formattedValues := make([]string, 0, list.Len())
+		for i := 0; i < list.Len(); i++ {
+			item := list.Get(i)
+			formattedValue, err := FormatFieldValue(identFunc, field, item)
+			if err != nil {
+				return "", err
+			}
+			formattedValues = append(formattedValues, formattedValue)
+		}
+
+		switch field.Desc.Kind() {
+		case protoreflect.GroupKind:
+			return "", errors.New("we don't support groups yet")
+		case protoreflect.MessageKind:
+			return fmt.Sprintf(
+				"[]*%s{%s}",
+				identFunc(field.Message.GoIdent),
+				strings.Join(formattedValues, ", "),
+			), nil
+		default:
+			return fmt.Sprintf(
+				"[]%s{%s}",
+				field.Desc.Kind().String(),
+				strings.Join(formattedValues, ", "),
+			), nil
+		}
+	case protoreflect.Map:
 		return "", errors.New(fmt.Sprintf(`"Unsupported type: %T"`, v))
 	default:
 		return fmt.Sprintf("%v", v), nil
