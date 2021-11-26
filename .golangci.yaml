@@ -30,7 +30,7 @@ linters-settings:
 
   exhaustive:
     check-generated: false
-    default-signifies-exhaustive: false
+    default-signifies-exhaustive: true
 
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
