@@ -53,7 +53,7 @@ func FormatFieldValue(
 		fieldsByNumber := CreateFieldsByNumber(field.Message.Fields)
 		value.Message()
 
-		return FormatMessageFieldNew(
+		return FormatMessageField(
 			identFunc,
 			field.Message.GoIdent,
 			fieldsByNumber,
@@ -95,7 +95,9 @@ func FormatFieldValue(
 	}
 }
 
-func FormatMessageFieldNew(
+// FormatMessageField takes care of formatting a message to
+// a properly string format.
+func FormatMessageField(
 	identFunc IdentFunc,
 	ident protogen.GoIdent,
 	fieldsByNumber FieldsByNumber,

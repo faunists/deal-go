@@ -323,7 +323,7 @@ func inputOutputToString(
 
 	fieldsByNumber := processors.CreateFieldsByNumber(message.Fields)
 
-	return processors.FormatMessageFieldNew(
+	return processors.FormatMessageField(
 		identFunc,
 		message.GoIdent,
 		fieldsByNumber,
