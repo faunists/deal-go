@@ -60,34 +60,7 @@ func FormatFieldValue(
 			value.Message(),
 		)
 	case protoreflect.List:
-		list := value.List()
-
-		formattedValues := make([]string, 0, list.Len())
-		for i := 0; i < list.Len(); i++ {
-			item := list.Get(i)
-			formattedValue, err := FormatFieldValue(identFunc, field, item)
-			if err != nil {
-				return "", err
-			}
-			formattedValues = append(formattedValues, formattedValue)
-		}
-
-		switch field.Desc.Kind() {
-		case protoreflect.GroupKind:
-			return "", errors.New("we don't support groups yet")
-		case protoreflect.MessageKind:
-			return fmt.Sprintf(
-				"[]*%s{%s}",
-				identFunc(field.Message.GoIdent),
-				strings.Join(formattedValues, ", "),
-			), nil
-		default:
-			return fmt.Sprintf(
-				"[]%s{%s}",
-				field.Desc.Kind().String(),
-				strings.Join(formattedValues, ", "),
-			), nil
-		}
+		return formatList(identFunc, field, value)
 	case protoreflect.Map:
 		return formatMap(identFunc, field, value)
 	default:
@@ -152,6 +125,41 @@ func CreateFieldsByNumber(fields []*protogen.Field) FieldsByNumber {
 	}
 
 	return fieldsByNumber
+}
+
+func formatList(
+	identFunc IdentFunc,
+	field *protogen.Field,
+	value protoreflect.Value,
+) (string, error) {
+	list := value.List()
+
+	formattedValues := make([]string, 0, list.Len())
+	for i := 0; i < list.Len(); i++ {
+		item := list.Get(i)
+		formattedValue, err := FormatFieldValue(identFunc, field, item)
+		if err != nil {
+			return "", err
+		}
+		formattedValues = append(formattedValues, formattedValue)
+	}
+
+	switch field.Desc.Kind() {
+	case protoreflect.GroupKind:
+		return "", errors.New("we don't support groups yet")
+	case protoreflect.MessageKind:
+		return fmt.Sprintf(
+			"[]*%s{%s}",
+			identFunc(field.Message.GoIdent),
+			strings.Join(formattedValues, ", "),
+		), nil
+	default:
+		return fmt.Sprintf(
+			"[]%s{%s}",
+			field.Desc.Kind().String(),
+			strings.Join(formattedValues, ", "),
+		), nil
+	}
 }
 
 func formatMap(
