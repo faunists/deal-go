@@ -32,7 +32,6 @@ func FormatFieldValue(
 	field *protogen.Field,
 	value protoreflect.Value,
 ) (string, error) {
-	// TODO: Make sure this works for proto enum
 	switch v := value.Interface(); v.(type) {
 	case float32, float64:
 		return fmt.Sprintf("%f", v), nil
@@ -41,7 +40,15 @@ func FormatFieldValue(
 	case []byte:
 		return fmt.Sprintf("%#v", v), nil
 	case protoreflect.EnumNumber:
-		return fmt.Sprintf("%d", v), nil
+		enum := field.Enum
+
+		if value.Enum() < 0 || int(value.Enum()) >= len(enum.Values) {
+			return "", errors.New(
+				fmt.Sprintf("enum option out of range for '%s'", enum.Desc.Name()),
+			)
+		}
+
+		return fmt.Sprintf("%s", identFunc(enum.Values[value.Enum()].GoIdent)), nil
 	case protoreflect.Message:
 		fieldsByNumber := CreateFieldsByNumber(field.Message.Fields)
 		value.Message()

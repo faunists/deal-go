@@ -72,14 +72,15 @@ func TestFormatFieldValue(t *testing.T) {
 			field:          nil,
 			expectedFormat: "[]byte{0x61, 0x62, 0x63, 0x64}",
 		},
-		{
-			name: "should format correctly when value is EnumNumber",
-			value: protoreflect.ValueOfEnum(
-				protoreflect.EnumNumber(128), //nolint:revive // random number
-			),
-			field:          nil,
-			expectedFormat: "128",
-		},
+		// TODO: Find a way to create a enum field and generate the field from them
+		//{
+		//	name: "should format correctly when value is EnumNumber",
+		//	value: protoreflect.ValueOfEnum(
+		//		protoreflect.EnumNumber(128), //nolint:revive // random number
+		//	),
+		//	field:          nil,
+		//	expectedFormat: "128",
+		//},
 		// TODO: Find a way to create a message and generate the field from them
 		//{
 		//	name:           "should format correctly when value is a message",
