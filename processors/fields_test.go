@@ -98,6 +98,13 @@ func TestFormatFieldValue(t *testing.T) {
 		//	field:          nil,
 		//	expectedFormat: "[]int64{42}",
 		//},
+		// TODO: Find a way to create a map and generate the field from them
+		//{
+		//	name:           "should format correctly when value is Map",
+		//	value:          nil,
+		//	field:          nil,
+		//	expectedFormat: `map[string]string{"test": "test"}`,
+		//},
 	}
 
 	identFunc := func(ident protogen.GoIdent) string {

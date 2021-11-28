@@ -32,9 +32,7 @@ func FormatFieldValue(
 	field *protogen.Field,
 	value protoreflect.Value,
 ) (string, error) {
-	// TODO: Make sure this works for proto enum, and map
-	// References:
-	//   - protoreflect.Map
+	// TODO: Make sure this works for proto enum
 	switch v := value.Interface(); v.(type) {
 	case float32, float64:
 		return fmt.Sprintf("%f", v), nil
@@ -84,7 +82,7 @@ func FormatFieldValue(
 			), nil
 		}
 	case protoreflect.Map:
-		return "", errors.New(fmt.Sprintf(`"Unsupported type: %T"`, v))
+		return formatMap(identFunc, field, value)
 	default:
 		return fmt.Sprintf("%v", v), nil
 	}
@@ -145,4 +143,73 @@ func CreateFieldsByNumber(fields []*protogen.Field) FieldsByNumber {
 	}
 
 	return fieldsByNumber
+}
+
+func formatMap(
+	identFunc IdentFunc,
+	field *protogen.Field,
+	value protoreflect.Value,
+) (string, error) {
+	var err error
+
+	m := value.Map()
+
+	// A `Map` is represented by a message which contains two fields,
+	// you can use the `field.Message.Desc.IsMapEntry` method to verify whether
+	// a message represents a map. Explanation about the fields extracted from godoc:
+	//
+	// Map entry messages have only two fields:
+	//	• a "key" field with a field number of 1
+	//	• a "value" field with a field number of 2
+	// The key and value types are determined by these two fields.
+	//
+	// nolint:lll // link
+	// Source: https://pkg.go.dev/google.golang.org/protobuf/reflect/protoreflect#MessageDescriptor
+	keyField := field.Message.Fields[0]
+	valueField := field.Message.Fields[1]
+
+	formattedValues := make([]string, 0, m.Len())
+	m.Range(func(key protoreflect.MapKey, insideValue protoreflect.Value) bool {
+		var formattedKey string
+		formattedKey, err = FormatFieldValue(identFunc, valueField, key.Value())
+		if err != nil {
+			return false
+		}
+
+		var formattedValue string
+		formattedValue, err = FormatFieldValue(identFunc, valueField, insideValue)
+		if err != nil {
+			return false
+		}
+
+		formattedValues = append(
+			formattedValues,
+			fmt.Sprintf("%s: %s", formattedKey, formattedValue),
+		)
+
+		return true
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	switch valueField.Desc.Kind() {
+	case protoreflect.GroupKind:
+		return "", errors.New("we don't support groups yet")
+	case protoreflect.MessageKind:
+		return fmt.Sprintf(
+			"map[%s]*%s{%s}",
+			keyField.Desc.Kind(),
+			identFunc(valueField.Message.GoIdent),
+			strings.Join(formattedValues, ", "), //nolint:revive // don't need a const for sep
+		), nil
+	default:
+		return fmt.Sprintf(
+			"map[%s]%s{%s}",
+			keyField.Desc.Kind(),
+			valueField.Desc.Kind(),
+			strings.Join(formattedValues, ", "), //nolint:revive // don't need a const for sep
+		), nil
+	}
 }
