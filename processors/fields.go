@@ -43,9 +43,7 @@ func FormatFieldValue(
 		enum := field.Enum
 
 		if value.Enum() < 0 || int(value.Enum()) >= len(enum.Values) {
-			return "", errors.New(
-				fmt.Sprintf("enum option out of range for '%s'", enum.Desc.Name()),
-			)
+			return "", fmt.Errorf("enum option out of range for '%s'", enum.Desc.Name())
 		}
 
 		return fmt.Sprintf("%s", identFunc(enum.Values[value.Enum()].GoIdent)), nil
