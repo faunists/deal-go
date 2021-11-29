@@ -43,7 +43,7 @@ service MyService {
 
 ### Contract file
 
-After that you need to write the contract that should be respected, the contract is written as a JSON file.
+After that you need to write the contract that should be respected, the contract file can be written using a JSON or YAML file.
 You can set both, Success and Failures cases:
 ```json
 {
@@ -95,6 +95,8 @@ plugins:
 
 To use the generated client you can just import it from the generated module:
 ```go
+package main
+
 import "YOUR_PACKAGE_HERE/example"
 
 func main() {
