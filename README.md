@@ -15,6 +15,34 @@ __Deal__ will generate some code for us:
 
 You can check out an example project [here](https://github.com/faunists/deal-go-example).
 
+## Installation
+
+Assuming that you are using [Go Modules](https://github.com/golang/go/wiki/Modules), it's
+recommended to use a [tool dependency](https://github.com/golang/go/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module)
+in order to track your tools version:
+
+```go
+// +build tools
+
+package tools
+
+import (
+    _ "github.com/faunists/deal-go/protoc-gen-go-deal"
+    _ "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+    _ "google.golang.org/protobuf/cmd/protoc-gen-go"
+)
+```
+
+Once you have added the required packages run `go mod tidy` to resolve the versions and then
+install them by running:
+
+```shell
+go install \
+    github.com/faunists/deal-go/protoc-gen-go-deal \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
+```
+
 ## Usage example
 
 ### Proto service
