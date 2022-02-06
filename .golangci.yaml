@@ -91,7 +91,7 @@ linters-settings:
         severity: warning
         arguments:
           - maxLitCount: "3"
-            allowStrs: '""'
+            allowStrs: '"","SimpleMessage","MessageWithComplexFields"'
             allowInts: "0,1,2"
             allowFloats: "0.0,0.,1.0,1.,2.0,2."
 

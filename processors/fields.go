@@ -49,7 +49,6 @@ func FormatFieldValue(
 		return fmt.Sprintf("%s", identFunc(enum.Values[value.Enum()].GoIdent)), nil
 	case protoreflect.Message:
 		fieldsByNumber := CreateFieldsByNumber(field.Message.Fields)
-		value.Message()
 
 		return FormatMessageField(
 			identFunc,
