@@ -78,11 +78,6 @@ linters-settings:
   misspell:
     locale: US
 
-  nolintlint:
-    allow-unused: true
-    require-explanation: true
-    require-specific: true
-
   revive:
     # see https://github.com/mgechev/revive#available-rules for details.
     ignore-generated-header: true
@@ -142,13 +137,11 @@ linters:
     - govet
     - lll
     - misspell
-    - nolintlint
     - revive
     - staticcheck
     - thelper
     - unused
   fast: false
-
 
 issues:
   # Independently from option `exclude` we use default exclude patterns,
