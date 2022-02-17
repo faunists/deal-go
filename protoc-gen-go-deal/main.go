@@ -517,7 +517,7 @@ func generateSuccessTestForServer(
 				t.Run(test.name, func(t *testing.T) {
 					response, err := client.%s(ctx, test.request)
 					if err != nil {
-						t.Fatalf("unexpected error happened: %%w", err)
+						t.Fatalf("unexpected error happened: %%v", err)
 					}
 
 					if !proto.Equal(response, test.expectedResponse) {
