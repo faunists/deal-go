@@ -1,7 +1,9 @@
 # Changelog
 
-We follow Semantic Versions, see [0Ver](https://0ver.org/).
+We're following 0-based Versioning, see [0Ver](https://0ver.org/).
 
-## Version 0.0.1 (WIP)
+## WIP
+
+## Version 0.1.0
 
 Initial release.
