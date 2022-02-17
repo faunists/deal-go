@@ -22,3 +22,5 @@
 
 # TODO: Remove this guy when development phase end
 main
+
+dist/

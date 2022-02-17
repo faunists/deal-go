@@ -1,0 +1,27 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+env:
+  - GO111MODULE=on
+
+builds:
+  - main: ./protoc-gen-go-deal/main.go
+    id: protoc-gen-go-deal
+    binary: protoc-gen-go-deal
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+
+archives:
+  - name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
+    format: binary
+    replacements:
+      386: i386
+      amd64: x86_64
+
+changelog:
+  skip: true
